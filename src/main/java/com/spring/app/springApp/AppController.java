@@ -11,8 +11,12 @@ import java.util.Optional;
 @RequestMapping("/")
 public class AppController {
 
+    private final TransactionRepository transactionRepository;
+
     @Autowired
-    private TransactionRepository transactionRepository;
+    public AppController(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
 
     @PostMapping(value = "/payments", consumes = {"application/json"})
     public ResponseEntity<Transactions> payments(@RequestBody Transactions savedTransactions) {
@@ -54,12 +58,12 @@ public class AppController {
     @DeleteMapping(value = "/deleteAllPayments")
     public ResponseEntity<Transactions> deleteAllPayments() {
         transactionRepository.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/deletePayment/{id}")
     public ResponseEntity<Transactions> deletePaymentById(@PathVariable("id") Long id) {
         transactionRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
